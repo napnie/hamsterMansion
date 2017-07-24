@@ -1,9 +1,13 @@
 $(document).ready(function () {
+    /** Server for Hamster Mansion */
     var link = "http://158.108.165.223/data/OACEED/"
+    /** DOM object for Hamster status */
     var $hamster = $('#hamStatus')
     var inCage = "Yes"
     var outCage = "No"
+    /** Status of luring system */
     var luring = false
+    var audio = new Audio('./sfx/alert.mp3')
 
     function send(value, variable = "") {
         console.log(link + variable + (variable ? "/" : "") + "set/" + value)
@@ -15,12 +19,10 @@ $(document).ready(function () {
     }
 
     var isLureStop = function() {
-        if (luring) {
-            howHam()
-            if($hamster.text() == outCage) {
-                send(0, "Lure")
-                luring = false
-            }
+        if (luring && $hamster.text() == outCage) { // It make sure so that when luring system is off, it won't bother the server
+            send(0, "Lure")
+            luring = false
+            audio.pause()
         }
     }
 
@@ -32,6 +34,7 @@ $(document).ready(function () {
                 $hamster.text(outCage)
                 send(1, "Lure")
                 luring = true
+                audio.play()
             }
             else {
                 $hamster.text(inCage)
@@ -50,15 +53,15 @@ $(document).ready(function () {
 
     var howFood = function() {
         var $food = $('#foodBar')
-        var max = 5
-        var min = 100
-        var range = min - max
+        var max = 6
+        var min = 0
+        var range = max - min
 
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
 
-            var percent = ( (data - min)/range ) * 100
+            var percent = ( data/range ) * 100
 
             $food.css("width", percent+"%")
             $food.text(percent+"%")

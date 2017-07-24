@@ -3,6 +3,7 @@ $(document).ready(function () {
     var $hamster = $('#hamStatus')
     var inCage = "Yes"
     var outCage = "No"
+    var luring = false
 
     function send(value, variable = "") {
         console.log(link + variable + (variable ? "/" : "") + "set/" + value)
@@ -13,14 +14,14 @@ $(document).ready(function () {
         })
     }
 
-    var lure = function() {
-        send(1, "Lure")
-        while ($hamster.text() == outCage) {
-            setTimeout(function () {
-                howHam()
-            }, 3000)
+    var isLureStop = function() {
+        if (luring) {
+            howHam()
+            if($hamster.text() == outCage) {
+                send(0, "Lure")
+                luring = false
+            }
         }
-        send(0, "Lure")
     }
 
     var howHam = function () {
@@ -29,7 +30,8 @@ $(document).ready(function () {
         }).done(function (data) {
             if (data == 1) {
                 $hamster.text(outCage)
-                lure()
+                send(1, "Lure")
+                luring = true
             }
             else {
                 $hamster.text(inCage)
@@ -92,12 +94,15 @@ $(document).ready(function () {
         })
     }
 
-    $('#lure').click(lure() )
+    $('#lure').click(function() {
+        send(1, "Lure")
+    } )
 
     setInterval(function () {
         howHam()
         howMoisture()
         howFood()
         howTemp()
+        isLureStop()
     }, 5000)
 })

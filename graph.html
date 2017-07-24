@@ -1,6 +1,8 @@
 <html>
 <head>
   <title>graph</title>
+
+
  
   <link rel="stylesheet" href = "./graph.css"></link>
 
@@ -14,10 +16,110 @@
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href = "./graph.css"></link>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="./graph.js"></script>
+
+  <script type="text/javascript">
+	window.onload = function () {
+
+      var dps = [{x: 0, y: 0}];   //dataPoints. 
+
+      var chart = new CanvasJS.Chart("chart",{
+      	title :{
+      		text: "How many times that Hamster flee"
+      	},
+      	axisX: {						
+      		title: "time"
+      	},
+      	axisY: {						
+      		title: "times"
+      	},
+      	data: [{
+      		type: "line",
+      		dataPoints : dps
+      	}]
+      });
+
+      chart.render();
+      var xVal = dps.length + 1;
+      var yVal = 0 ;	
+      var updateInterval = 1000;
+
+      var updateChart = function () {
+      	
+      	
+      	yVal = yVal +  howHam() ;
+      	dps.push({x: xVal,y: yVal});
+      	
+      	xVal++;
+      	if (dps.length >  10 )
+      	{
+      		dps.shift();				
+      	}
+
+      	chart.render();		
+
+	// update chart after specified time. 
+
+};
+
+setInterval(function(){updateChart()}, updateInterval); 
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+<script type="text/javascript">
+	window.onload = function () {
+
+      var dps2 = [{x: 1, y: 0}];   //dataPoints. 
+
+      var chart2 = new CanvasJS.Chart("chartContainer2",{
+      	title :{
+      		text: "Food for Hamster"
+      	},
+      	axisX: {						
+      		title: "time"
+      	},
+      	axisY: {						
+      		title: "number"
+      	},
+      	data: [{
+      		type: "line",
+      		dataPoints : dps2
+      	}]
+      });
+
+      chart2.render();
+      var xVal2 = dps2.length + 1;
+      var yVal2 = 0 ;	
+      var updateInterval2 = 1000;
+
+      var updateChart2 = function () {
+      	
+      	
+      	yVal2 = yVal2 +  howfood() ;
+      	dps2.push({x: xVal2,y: yVal2});
+      	
+      	xVal2++;
+      	if (dps2.length >  10 )
+      	{
+      		dps2.shift();				
+      	}
+
+      	chart2.render();		
+
+	// update chart after specified time. 
+
+};
+
+setInterval2(function(){updateChart2()}, updateInterval2); 
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 </head>
 <body >
@@ -30,7 +132,9 @@
             <li><a href="index.html">STATUS</a></li>
             <li><a href="graph.html">STATISTICS</a></li>
         </ul>
-    </div>
+        </div>
+            <div id="chartContainer2" style="height: 300px; width: 100%;" >
+        </div>
     </div>
 </body>
 </html>

@@ -19,7 +19,7 @@ $(document).ready(function () {
     }
 
     var isLureStop = function() {
-        if (luring && $hamster.text() == inCage) { // It make sure so that when luring system is off, it won't bother the server
+        if (!luring && $hamster.text() == inCage) { // It make sure so that when luring system is off, it won't bother the server
             send(0, "Lure")
             luring = false
             audio.pause()
@@ -30,10 +30,10 @@ $(document).ready(function () {
         $.ajax({
             url: link + "deathORalive"
         }).done(function (data) {
+            console.log("Status "+ data)
             if (data == 1) {
                 $hamster.text(outCage)
                 send(1, "Lure")
-                luring = true
                 audio.play()
             }
             else {
@@ -97,8 +97,14 @@ $(document).ready(function () {
     }
 
     $('#lure').click(function() {
-        send(1, "Lure")
-        luring = true
+        if(luring) {
+            send(0, "Lure")
+            luring = false
+        } else {
+            send(1, "Lure")
+            luring = true
+        }
+        
     } )
 
     setInterval(function () {

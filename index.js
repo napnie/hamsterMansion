@@ -19,8 +19,8 @@ $(document).ready(function () {
         })
     }
 
-    var isLureStop = function() {
-        if (!luring && lureStatus && $hamster.text() == inCage ) { // It make sure so that when luring system is off, it won't bother the server
+    var isLureStop = function () {
+        if (!luring && lureStatus && $hamster.text() == inCage) { // It make sure so that when luring system is off, it won't bother the server
             send(0, "Lure")
             lureStatus = false
             luring = false
@@ -32,16 +32,17 @@ $(document).ready(function () {
         $.ajax({
             url: link + "deathORalive"
         }).done(function (data) {
-            console.log("Status "+ data)
-            if (data == 1 && !lureStatus) {
-                $hamster.text(outCage)
-                $hamster.removeClass("yes")
-                $hamster.addClass("no")
-                send(1, "Lure")
-                lureStatus = true
-                audio.play()
-            }
-            else {
+            console.log("Status " + data)
+            if (data == 1) {
+                if (!lureStatus) {
+                    $hamster.text(outCage)
+                    $hamster.removeClass("yes")
+                    $hamster.addClass("no")
+                    send(1, "Lure")
+                    lureStatus = true
+                    audio.play()
+                }
+            } else {
                 $hamster.text(inCage)
                 $hamster.removeClass("no")
                 $hamster.addClass("yes")
@@ -49,7 +50,7 @@ $(document).ready(function () {
         })
     }
 
-    var howMoisture = function() {
+    var howMoisture = function () {
         var $mois = $('#moisPercent')
         $.ajax({
             url: link + "Moisture"
@@ -58,7 +59,7 @@ $(document).ready(function () {
         })
     }
 
-    var howFood = function() {
+    var howFood = function () {
         var $food = $('#foodBar')
         var max = 0
         var min = 6
@@ -67,17 +68,17 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
-            console.log("food "+data)
-            var percent = ( (min - data)/range ) * 100
+            console.log("food " + data)
+            var percent = ((min - data) / range) * 100
 
-            $food.css("width", percent+"%")
-            $food.text(percent+"%")
+            $food.css("width", percent + "%")
+            $food.text(percent + "%")
         })
     }
 
-    var howTemp = function() {
+    var howTemp = function () {
         var $temp = $('#tempBar')
-        var removeColor = function() {
+        var removeColor = function () {
             $temp.removeClass("bar-hot")
             $temp.removeClass("bar-comfort")
             $temp.removeClass("bar-cold")
@@ -87,26 +88,26 @@ $(document).ready(function () {
             url: link + "Temperature"
         }).done(function (data) {
             // range of temp bar is 12 - 30 ,width 18
-            var percent = ((data-12)/18)*100
-            console.log("Temp "+data)
+            var percent = ((data - 12) / 18) * 100
+            console.log("Temp " + data)
 
-            $temp.css("width", percent+"%")
+            $temp.css("width", percent + "%")
             removeColor()
-            if(data < 18) {
-                $temp.text("TOO COLD "+data+"°C")
+            if (data < 18) {
+                $temp.text("TOO COLD " + data + "°C")
                 $temp.addClass("bar-cold")
-            } else if(data < 29) {
-                $temp.text("COMFORTABLE "+data+"°C")
+            } else if (data < 29) {
+                $temp.text("COMFORTABLE " + data + "°C")
                 $temp.addClass("bar-comfort")
             } else {
-                $temp.text("TOO HOT "+data+"°C")
+                $temp.text("TOO HOT " + data + "°C")
                 $temp.addClass("bar-hot")
             }
         })
     }
 
-    $('#lure').click(function() {
-        if(lureStatus) {
+    $('#lure').click(function () {
+        if (lureStatus) {
             send(0, "Lure")
             lureStatus = false
             luring = false
@@ -115,8 +116,8 @@ $(document).ready(function () {
             lureStatus = true
             luring = true
         }
-        
-    } )
+
+    })
 
     setInterval(function () {
         howHam()
@@ -128,6 +129,6 @@ $(document).ready(function () {
 })
 
 function setFood(value) {
-    $('#foodBar').css("width", value+"%")
-    $('#foodBar').text(value+"%")
+    $('#foodBar').css("width", value + "%")
+    $('#foodBar').text(value + "%")
 }

@@ -25,6 +25,16 @@ $(document).ready(function () {
         })
     }
 
+    var howMoisture = function() {
+        var $mois = $('#moisPercent')
+        $.ajax({
+            url: link + "Moisture"
+        }).done(function (data) {
+            console.log(data)
+            $('#moisPercent').text(data)
+        })
+    }
+
     $('#hamStatus').click(function () {
         var $hamster = $(this)
         if ($hamster.text() == "Yes") $hamster.text("No")
@@ -43,5 +53,6 @@ $(document).ready(function () {
     setInterval(function () {
         var hamStatus
         howHam()
+        howMoisture()
     }, 5000)
 })

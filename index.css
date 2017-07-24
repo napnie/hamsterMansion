@@ -24,7 +24,7 @@ ul {
     margin-top: 0;
     padding: 20px;
     overflow: hidden;
-    background-color: #ffc107;
+    background-color: #f4b169;
     font-size: 50px;
 }
 
@@ -58,9 +58,13 @@ li a:hover {
     font-size: 20px ;
 }
 
+#data{
+    margin-top: 10px;
+}
+
 #hamStatus {
     align-items: center ;
-    background-color: green ;
+    background-color: #c888ef ;
 }
 
 p {
@@ -76,12 +80,23 @@ button {
     background-color: pink ;
 }
 
-#foodBar {
-    background-image: brown ;
+#foodBar,#tempBar {
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.progess{
-    margin-top: 100px;
+#foodBar {
+    background-color: #77a9f9;
+}
+
+#moisPercent,#moisPercentunit{
+    margin-left: 25%;
+    font-size: 50px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+span{
+    color:#a33404;
 }
 
 img {

@@ -1,3 +1,24 @@
+#header {
+    text-align: center;
+    text-shadow: 4px 4px #5d8cd8;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    background-image: url("p2.jpg");
+    background-size: 10%;
+}
+h1{
+    font-size: 100px;
+    font-weight: bolder;
+}
+body {
+    background-image: url("bg3.jpg");
+    background-size: 100%;
+    border: weight 10px;    
+}
+
+.col-md-2 {
+    font-weight: bolder;
+}
+
 ul {
     list-style-type: none;
     margin: 10px;

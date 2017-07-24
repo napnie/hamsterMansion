@@ -47,7 +47,7 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Moisture"
         }).done(function (data) {
-            $mois.text(data)
+            $mois.gauge(data, { unit: "%", color: "green", bgcolor: "white", font: "300px", type: "halfcircle"})
         })
     }
 

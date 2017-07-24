@@ -60,7 +60,6 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
-
             var percent = ( data/range ) * 100
 
             $food.css("width", percent+"%")

@@ -26,7 +26,6 @@ $(document).ready(function () {
         $.ajax({
             url: link + "deathORalive"
         }).done(function (data) {
-            console.log(data)
             if (data == 1) {
                 $hamster.text(outCage)
                 lure()
@@ -42,7 +41,6 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Moisture"
         }).done(function (data) {
-            console.log(data)
             $mois.text(data)
         })
     }
@@ -56,7 +54,6 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
-            console.log(data)
 
             var percent = ( (data - min)/range ) * 100
 
@@ -76,7 +73,6 @@ $(document).ready(function () {
         $.ajax({
             url: link + "Temperature"
         }).done(function (data) {
-            console.log(data)
             // range of temp bar is 12 - 30 ,width 18
             var percent = ((data-12)/18)*100
 

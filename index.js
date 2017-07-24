@@ -19,7 +19,7 @@ $(document).ready(function () {
     }
 
     var isLureStop = function() {
-        if (luring && $hamster.text() == outCage) { // It make sure so that when luring system is off, it won't bother the server
+        if (luring && $hamster.text() == inCage) { // It make sure so that when luring system is off, it won't bother the server
             send(0, "Lure")
             luring = false
             audio.pause()

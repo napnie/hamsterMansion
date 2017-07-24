@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var link = "http://158.108.165.223/data/OACEED/"
+    var $hamster = $('#hamStatus')
 
     function send(value, variable = "") {
         console.log(link + variable + (variable ? "/" : "") + "set/" + value)
@@ -10,14 +11,23 @@ $(document).ready(function () {
         })
     }
 
+    var lure = function() {
+        send(1, "Lure")
+        while ($hamster.text() != "Yes") {
+            await(3000)
+            howHam()
+        }
+        send(0, "Lure")
+    }
+
     var howHam = function () {
-        var $hamster = $('#hamStatus')
         $.ajax({
             url: link + "deathORalive"
         }).done(function (data) {
             console.log(data)
             if (data == 1) {
                 $hamster.text("Yes")
+                lure()
             }
             else {
                 $hamster.text("No")
@@ -31,7 +41,7 @@ $(document).ready(function () {
             url: link + "Moisture"
         }).done(function (data) {
             console.log(data)
-            $('#moisPercent').text(data)
+            $mois.text(data)
         })
     }
 
@@ -46,25 +56,42 @@ $(document).ready(function () {
         })
     }
 
-    $('#hamStatus').click(function () {
-        var $hamster = $(this)
-        if ($hamster.text() == "Yes") $hamster.text("No")
-        else $hamster.text("Yes")
-    })
-
-    $('#lure').click(function () {
-        send(1, "Lure")
-        while ($hamster.text() != "Yes") {
-            await(3000)
-            howHam()
+    var howTemp = function() {
+        var $temp = $('#tempBar')
+        var removeColor = function() {
+            $temp.removeClass("progress-bar-success")
+            $temp.removeClass("progress-bar-info")
+            $temp.removeClass("progress-bar-warning")
         }
-        send(0, "Lure")
-    })
+
+        $.ajax({
+            url: link + "Temp"
+        }).done(function (data) {
+            console.log(data)
+            // range of temp bar is 12 - 30 ,width 18
+            var percent = ((data-12)/18)*100
+
+            $temp.css("width", percent+"%")
+            removeColor()
+            if(data < 18) {
+                $temp.text("Too cold")
+                $temp.addClass("progress-bar-info")
+            } else if(data < 29) {
+                $temp.text("Comfortable")
+                $temp.addClass("progress-bar-success")
+            } else {
+                $temp.text("Too hot")
+                $temp.addClass("progress-bar-warning")
+            }
+        })
+    }
+
+    $('#lure').click(lure() )
 
     setInterval(function () {
-        var hamStatus
         howHam()
         howMoisture()
         howFood()
+        howTemp()
     }, 5000)
 })

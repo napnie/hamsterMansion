@@ -127,3 +127,15 @@ img {
     height: 210px ;
     width: 230px ;
 }
+
+.bar-hot {
+    background-color: lightcoral
+}
+
+.bar-comfort {
+    background-color: lightgreen
+}
+
+.bar-cold {
+    background-color: lightskyblue
+}

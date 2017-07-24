@@ -16,8 +16,9 @@ $(document).ready(function () {
     var lure = function() {
         send(1, "Lure")
         while ($hamster.text() == outCage) {
-            await(3000)
-            howHam()
+            setTimeout(function () {
+                howHam()
+            }, 3000)
         }
         send(0, "Lure")
     }

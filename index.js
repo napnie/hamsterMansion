@@ -35,12 +35,16 @@ $(document).ready(function () {
             console.log("Status "+ data)
             if (data == 1 && !lureStatus) {
                 $hamster.text(outCage)
+                $hamster.removeClass("yes")
+                $hamster.addClass("no")
                 send(1, "Lure")
                 lureStatus = true
                 audio.play()
             }
             else {
                 $hamster.text(inCage)
+                $hamster.removeClass("no")
+                $hamster.addClass("yes")
             }
         })
     }

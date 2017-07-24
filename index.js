@@ -35,6 +35,17 @@ $(document).ready(function () {
         })
     }
 
+    var howFood = function() {
+        var $food = $('#foodBar')
+        $.ajax({
+            url: link + "Food"
+        }).done(function (data) {
+            console.log(data)
+            $food.css("width", data+"%")
+            $food.text(data+"%")
+        })
+    }
+
     $('#hamStatus').click(function () {
         var $hamster = $(this)
         if ($hamster.text() == "Yes") $hamster.text("No")
@@ -54,5 +65,6 @@ $(document).ready(function () {
         var hamStatus
         howHam()
         howMoisture()
+        howFood()
     }, 5000)
 })

@@ -1,133 +1,80 @@
+<script type="text/javascript">
 
-        var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        var config = {
-            type: 'line',
-            data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [{
-                    label: "My First dataset",
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    data: [
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor()
-                    ],
-                    fill: false,
-                }, {
-                    label: "My Second dataset",
-                    fill: false,
-                    backgroundColor: window.chartColors.blue,
-                    borderColor: window.chartColors.blue,
-                    data: [
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor()
-                    ],
-                }]
-            },
-            options: {
-                responsive: true,
-                title:{
-                    display:true,
-                    text:'Chart.js Line Chart'
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Month'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
-                }
-            }
-        };
+var canvas ;
+var context ;
+var Val_Max;
+var Val_Min;
+var sections;
+var xScale;
+var yScale;
+var y;
+		// values of each item on the graph
+var itemName = [ "USA", "China", "India", "Japan" , "Germany"];
+var itemValue = [ 14, 7, 4.2, 4, 3.5 ];
 
-        window.onload = function() {
-            var ctx = document.getElementById("canvas").getContext("2d");
-            window.myLine = new Chart(ctx, config);
-        };
+function init() {
+		// intialize values for each variables
+	sections = 5;
+	Val_Max = 14;
+	var stepSize = 1;
+	var columnSize = 50;
+	var rowSize = 60;
+	var margin = 10;
+	var header = "In Trillion $" 
+		//
+		
+	canvas = document.getElementById("canvas");
+	context = canvas.getContext("2d");
+	context.fillStyle = "#000;"
+	
+	yScale = (canvas.height - columnSize - margin) / (Val_Max);
+	xScale = (canvas.width - rowSize) / (sections + 1);
+	
+	context.strokeStyle="#000;"; // background black lines
+	context.beginPath();
+		// column names 
+	context.font = "19 pt Arial;"
+	context.fillText(header, 0,columnSize - margin);
+		// draw lines in the background
+	context.font = "16 pt Helvetica"
+	var count =  0;
+	for (scale=Val_Max;scale>=0;scale = scale - stepSize) {
+		y = columnSize + (yScale * count * stepSize); 
+		context.fillText(scale, margin,y + margin);
+		context.moveTo(rowSize,y)
+		context.lineTo(canvas.width,y)
+		count++;
+	}
+	context.stroke();
+	
+		// print names of each data entry
+	context.font = "20 pt Verdana";
+	context.textBaseline="bottom";
+	for (i=0;i<5;i++) {
+		computeHeight(itemValue[i]);
+		context.fillText(itemName[i], xScale * (i+1),y - margin);
+	}
+	
+		// shadow for graph's bar lines with color and offset
+  
+	context.fillStyle="#9933FF;";
+  context.shadowColor = 'rgba(128,128,128, 0.5)';
+  
+  //shadow offset along X and Y direction 
+	context.shadowOffsetX = 9;
+	context.shadowOffsetY = 3;
+  
+		// translate to bottom of graph  inorder to match the data 
+  context.translate(0,canvas.height - margin);
+	context.scale(xScale,-1 * yScale);
+  
+		// draw each graph bars	
+	for (i=0;i< 5 ;i++) {
+		context.fillRect(i+1, 0, 0.3, itemValue[i])
+	}
+}
 
-        document.getElementById('randomizeData').addEventListener('click', function() {
-            config.data.datasets.forEach(function(dataset) {
-                dataset.data = dataset.data.map(function() {
-                    return randomScalingFactor();
-                });
+function computeHeight(value) {
+	y = canvas.height - value * yScale 
 
-            });
-
-            window.myLine.update();
-        });
-
-        var colorNames = Object.keys(window.chartColors);
-        document.getElementById('addDataset').addEventListener('click', function() {
-            var colorName = colorNames[config.data.datasets.length % colorNames.length];
-            var newColor = window.chartColors[colorName];
-            var newDataset = {
-                label: 'Dataset ' + config.data.datasets.length,
-                backgroundColor: newColor,
-                borderColor: newColor,
-                data: [],
-                fill: false
-            };
-
-            for (var index = 0; index < config.data.labels.length; ++index) {
-                newDataset.data.push(randomScalingFactor());
-            }
-
-            config.data.datasets.push(newDataset);
-            window.myLine.update();
-        });
-
-        document.getElementById('addData').addEventListener('click', function() {
-            if (config.data.datasets.length > 0) {
-                var month = MONTHS[config.data.labels.length % MONTHS.length];
-                config.data.labels.push(month);
-
-                config.data.datasets.forEach(function(dataset) {
-                    dataset.data.push(randomScalingFactor());
-                });
-
-                window.myLine.update();
-            }
-        });
-
-        document.getElementById('removeDataset').addEventListener('click', function() {
-            config.data.datasets.splice(0, 1);
-            window.myLine.update();
-        });
-
-        document.getElementById('removeData').addEventListener('click', function() {
-            config.data.labels.splice(-1, 1); // remove the label first
-
-            config.data.datasets.forEach(function(dataset, datasetIndex) {
-                dataset.data.pop();
-            });
-
-            window.myLine.update();
-        });
-    
+</script>

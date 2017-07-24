@@ -7,6 +7,7 @@ $(document).ready(function () {
     var outCage = "No"
     /** Status of luring system */
     var luring = false
+    var lureStatus = false
     var audio = new Audio('./sfx/alert.mp3')
 
     function send(value, variable = "") {
@@ -19,8 +20,9 @@ $(document).ready(function () {
     }
 
     var isLureStop = function() {
-        if (luring && $hamster.text() == inCage) { // It make sure so that when luring system is off, it won't bother the server
+        if (!luring && lureStatus && $hamster.text() == inCage ) { // It make sure so that when luring system is off, it won't bother the server
             send(0, "Lure")
+            lureStatus = false
             luring = false
             audio.pause()
         }
@@ -30,14 +32,19 @@ $(document).ready(function () {
         $.ajax({
             url: link + "deathORalive"
         }).done(function (data) {
-            if (data == 1) {
+            console.log("Status "+ data)
+            if (data == 1 && !lureStatus) {
                 $hamster.text(outCage)
+                $hamster.removeClass("yes")
+                $hamster.addClass("no")
                 send(1, "Lure")
-                luring = true
+                lureStatus = true
                 audio.play()
             }
             else {
                 $hamster.text(inCage)
+                $hamster.removeClass("no")
+                $hamster.addClass("yes")
             }
         })
     }
@@ -53,14 +60,15 @@ $(document).ready(function () {
 
     var howFood = function() {
         var $food = $('#foodBar')
-        var max = 6
-        var min = 0
-        var range = max - min
+        var max = 0
+        var min = 6
+        var range = min - max
 
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
-            var percent = ( data/range ) * 100
+            console.log("food "+data)
+            var percent = ( (min - data)/range ) * 100
 
             $food.css("width", percent+"%")
             $food.text(percent+"%")
@@ -80,25 +88,34 @@ $(document).ready(function () {
         }).done(function (data) {
             // range of temp bar is 12 - 30 ,width 18
             var percent = ((data-12)/18)*100
+            console.log("Temp "+data)
 
             $temp.css("width", percent+"%")
             removeColor()
             if(data < 18) {
-                $temp.text("TOO COLD")
+                $temp.text("TOO COLD "+data+"°C")
                 $temp.addClass("bar-cold")
             } else if(data < 29) {
-                $temp.text("COMFORTABLE")
+                $temp.text("COMFORTABLE "+data+"°C")
                 $temp.addClass("bar-comfort")
             } else {
-                $temp.text("TOO HOT")
+                $temp.text("TOO HOT "+data+"°C")
                 $temp.addClass("bar-hot")
             }
         })
     }
 
     $('#lure').click(function() {
-        send(1, "Lure")
-        luring = true
+        if(lureStatus) {
+            send(0, "Lure")
+            lureStatus = false
+            luring = false
+        } else {
+            send(1, "Lure")
+            lureStatus = true
+            luring = true
+        }
+        
     } )
 
     setInterval(function () {
@@ -109,3 +126,8 @@ $(document).ready(function () {
         isLureStop()
     }, 5000)
 })
+
+function setFood(value) {
+    $('#foodBar').css("width", value+"%")
+    $('#foodBar').text(value+"%")
+}

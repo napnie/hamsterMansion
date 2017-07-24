@@ -1,6 +1,8 @@
 $(document).ready(function () {
     var link = "http://158.108.165.223/data/OACEED/"
     var $hamster = $('#hamStatus')
+    var inCage = "Yes"
+    var outCage = "No"
 
     function send(value, variable = "") {
         console.log(link + variable + (variable ? "/" : "") + "set/" + value)
@@ -13,7 +15,7 @@ $(document).ready(function () {
 
     var lure = function() {
         send(1, "Lure")
-        while ($hamster.text() != "Yes") {
+        while ($hamster.text() == outCage) {
             await(3000)
             howHam()
         }
@@ -26,11 +28,11 @@ $(document).ready(function () {
         }).done(function (data) {
             console.log(data)
             if (data == 1) {
-                $hamster.text("Yes")
+                $hamster.text(outCage)
                 lure()
             }
             else {
-                $hamster.text("No")
+                $hamster.text(inCage)
             }
         })
     }
@@ -47,12 +49,19 @@ $(document).ready(function () {
 
     var howFood = function() {
         var $food = $('#foodBar')
+        var max = 5
+        var min = 100
+        var range = min - max
+
         $.ajax({
             url: link + "Food"
         }).done(function (data) {
             console.log(data)
-            $food.css("width", data+"%")
-            $food.text(data+"%")
+
+            var percent = ( (data - min)/range ) * 100
+
+            $food.css("width", percent+"%")
+            $food.text(percent+"%")
         })
     }
 
@@ -65,7 +74,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: link + "Temp"
+            url: link + "Temperature"
         }).done(function (data) {
             console.log(data)
             // range of temp bar is 12 - 30 ,width 18

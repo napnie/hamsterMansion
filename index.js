@@ -70,9 +70,9 @@ $(document).ready(function () {
     var howTemp = function() {
         var $temp = $('#tempBar')
         var removeColor = function() {
-            $temp.removeClass("progress-bar-success")
-            $temp.removeClass("progress-bar-info")
-            $temp.removeClass("progress-bar-warning")
+            $temp.removeClass("bar-hot")
+            $temp.removeClass("bar-comfort")
+            $temp.removeClass("bar-cold")
         }
 
         $.ajax({
@@ -84,20 +84,21 @@ $(document).ready(function () {
             $temp.css("width", percent+"%")
             removeColor()
             if(data < 18) {
-                $temp.text("Too cold")
-                $temp.addClass("progress-bar-info")
+                $temp.text("TOO COLD")
+                $temp.addClass("bar-cold")
             } else if(data < 29) {
-                $temp.text("Comfortable")
-                $temp.addClass("progress-bar-success")
+                $temp.text("COMFORTABLE")
+                $temp.addClass("bar-comfort")
             } else {
-                $temp.text("Too hot")
-                $temp.addClass("progress-bar-warning")
+                $temp.text("TOO HOT")
+                $temp.addClass("bar-hot")
             }
         })
     }
 
     $('#lure').click(function() {
         send(1, "Lure")
+        luring = true
     } )
 
     setInterval(function () {

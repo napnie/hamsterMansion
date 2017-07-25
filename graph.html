@@ -1,140 +1,112 @@
 <html>
+
 <head>
-  <title>graph</title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Hamster Mansion's Graph</title>
+    <!-- <link rel="stylesheet" href="./index.css"> -->
 
-<!-- sda -->
- 
-  <link rel="stylesheet" href = "./graph.css"></link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  
-  <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  <!-- Latest compiled and minified JavaScript -->
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-  <link rel="stylesheet" href = "./graph.css"></link>
-
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <script src="./graph.js"></script>
-
-  <script type="text/javascript">
+	<link rel="stylesheet" href="css/index.css">
+	<script type="text/javascript">
 	window.onload = function () {
+		
+		//initial value of dataPoints 
+		var dps = [
+		{label: "", y: 206},
+		{label: "", y: 163},
+		{label: "", y: 154},
+		{label: "", y: 176},
+		{label: "", y: 184},
+		{label: "", y: 122}
+		];	
 
-      var dps = [{x: 0, y: 0}];   //dataPoints. 
+		var chart = new CanvasJS.Chart("chartContainer",{			
+			title: {
+				text: "Food that hamster ate"		
+			},
+			axisY: {				
+				suffix: " "
+			},		
+			legend :{
+				verticalAlign: 'bottom',
+				horizontalAlign: "center"
+			},
+			data: [
+			{
+				type: "column",				
+				indexLabel: "{y} ",
+				dataPoints: dps					
+			}
+			]
+		});
 
-      var chart = new CanvasJS.Chart("chart",{
-      	title :{
-      		text: "How many times that Hamster flee"
-      	},
-      	axisX: {						
-      		title: "time"
-      	},
-      	axisY: {						
-      		title: "times"
-      	},
-      	data: [{
-      		type: "line",
-      		dataPoints : dps
-      	}]
-      });
+		
+		var updateInterval = 1000;	
+		
 
-      chart.render();
-      var xVal = dps.length + 1;
-      var yVal = 0 ;	
-      var updateInterval = 1000;
+		var updateChart = function () {
 
-      var updateChart = function () {
-      	
-      	
-      	yVal = yVal +  howHam() ;
-      	dps.push({x: xVal,y: yVal});
-      	
-      	xVal++;
-      	if (dps.length >  10 )
-      	{
-      		dps.shift();				
-      	}
-
-      	chart.render();		
-
-	// update chart after specified time. 
-
-};
-
-setInterval(function(){updateChart()}, updateInterval); 
-}
-</script>
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+				
+				// generating random variation deltaY
+				var yVal = Math.round(100*Math.random());
+				var boilerColor;
 
 
-<script type="text/javascript">
-	window.onload = function () {
+				// color of dataPoint dependent upon y value. 
 
-      var dps2 = [{x: 1, y: 0}];   //dataPoints. 
+				boilerColor =
+				yVal > 200 ? "#FF2500":
+				yVal >= 170 ? "#FF6000":
+				yVal < 170 ? "#6B8E23 ":							
+				null;
 
-      var chart2 = new CanvasJS.Chart("chartContainer2",{
-      	title :{
-      		text: "Food for Hamster"
-      	},
-      	axisX: {						
-      		title: "time"
-      	},
-      	axisY: {						
-      		title: "number"
-      	},
-      	data: [{
-      		type: "line",
-      		dataPoints : dps2
-      	}]
-      });
 
-      chart2.render();
-      var xVal2 = dps2.length + 1;
-      var yVal2 = 0 ;	
-      var updateInterval2 = 1000;
+				// updating the dataPoint
+				if(dps.length >= 30){
+					console.log(dps.shift())
+					for(let i=0;i<dps.length;i++){
+						dps[i].x = i;
+					}
 
-      var updateChart2 = function () {
-      	
-      	
-      	yVal2 = yVal2 +  howfood() ;
-      	dps2.push({x: xVal2,y: yVal2});
-      	
-      	xVal2++;
-      	if (dps2.length >  10 )
-      	{
-      		dps2.shift();				
-      	}
+				}
+				dps.push( {label: "" , y: yVal, color: boilerColor});
 
-      	chart2.render();		
+				//console.log(dps)
+			chart.render();
+		};
+		
+		updateChart();		
 
-	// update chart after specified time. 
+		// update chart after specified interval 
+		setInterval(function(){updateChart()}, updateInterval);
 
-};
 
-setInterval2(function(){updateChart2()}, updateInterval2); 
-}
-</script>
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
+	}
+	</script>
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
-<body >
-    <div class ="container">
-        <div id="header" class="row container-fluid">
+<body>
+	<div id="header" class="row container-fluid">
         <h1>HAMSTER MANSION</h1>
-        </div>
-        <div id="tab" class="row">
-        <ul>
-            <li><a href="index.html">STATUS</a></li>
-            <li><a href="graph.html">STATISTICS</a></li>
-        </ul>
-        </div>
-            <div id="chartContainer2" style="height: 300px; width: 100%;" >
-        </div>
     </div>
+    <div id="tab" class="row">
+        <ul id="fast">
+            <li class="col-md-1 col-md-offset-4"><a href="index.html">STATUS</a></li>
+            <li class="col-md-1 col-md-offset-1"><a href="graph.html">STATISTICS</a></li>
+        </ul>
+    </div>
+	<div id="chartContainer" class="col-md-oofset-1" style="height: 50%; width: 80%;">
+	</div>
 </body>
 </html>

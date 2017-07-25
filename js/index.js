@@ -70,7 +70,8 @@ $(document).ready(function () {
         }).done(function (data) {
             console.log("food " + data)
             var percent = ((min - data) / range) * 100
-
+            if(data > min) percent = 0
+                
             $food.css("width", percent + "%")
             $food.text(percent + "%")
         })
